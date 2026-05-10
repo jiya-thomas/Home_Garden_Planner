@@ -65,4 +65,26 @@
     {% endfor %}
 </div>
 
+<h3 class="section-title mt-4">Listed Fertilizers</h3>
+<div class="plant-grid">
+    {% for fert in fertilizers %}
+        <div class="card p-3" style="border-top: 4px solid var(--green-mid);">
+            <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ fert.name }}</h4>
+            <div style="margin-bottom: 12px;">
+                <span class="badge badge-low">{{ fert.type }}</span>
+            </div>
+            <p class="text-sm"><strong>Available:</strong> {{ fert.quantity_available }}</p>
+            {% if fert.description %}
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">{{ fert.description }}</p>
+            {% endif %}
+            <div class="p-2" style="background: var(--green-ghost); border-radius: 8px;">
+                <strong class="text-sm" style="color: var(--green-dark);">Usage:</strong>
+                <p style="font-size: 0.85rem; margin-top: 4px;">{{ fert.usage_instructions|truncatewords:15 }}</p>
+            </div>
+        </div>
+    {% empty %}
+        <div class="alert alert-info" style="grid-column: 1 / -1;">No fertilizers listed currently.</div>
+    {% endfor %}
+</div>
+
 {% endblock %}
