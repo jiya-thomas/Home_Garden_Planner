@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block page_title %}📔 {{ title }}{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group"><label>Plant *</label>{{ form.plot }}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group"><label>Date *</label>{{ form.date }}</div>
+        <div class="form-group"><label>Health Status</label>{{ form.health_status }}</div>
+      </div>
+      <div class="form-group"><label>Entry Title</label>{{ form.title }}</div>
+      <div class="form-group"><label>Notes *</label>{{ form.notes }}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group"><label>Height (cm)</label>{{ form.height_cm }}</div>
+        <div class="form-group"><label>Photo</label>{{ form.photo }}</div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">💾 Save Entry</button>
+        <a href="{% url 'journal_list' %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

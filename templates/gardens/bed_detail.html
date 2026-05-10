@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}{{ bed.name }} — Garden Planner{% endblock %}
+{% block page_title %}🪴 {{ bed.name }}{% endblock %}
+{% block topbar_actions %}
+  <a href="{% url 'plot_create' bed.pk %}" class="btn btn-primary btn-sm">+ Plant Here</a>
+  <a href="{% url 'bed_update' bed.pk %}" class="btn btn-outline btn-sm">Edit</a>
+{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:1fr 300px;gap:22px">
+  <div>
+    <div class="card mb-3">
+      <div class="card-header"><h3>🌱 Plants in This Bed</h3></div>
+      <div class="card-body">
+        {% if plots %}
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Plant</th><th>Planted</th><th>Status</th><th>Qty</th><th>Harvest</th><th>Days Left</th><th>Actions</th></tr></thead>
+              <tbody>
+              {% for plot in plots %}
+              <tr>
+                <td><strong>{{ plot.plant.name }}</strong><br><span class="text-muted text-sm"><span class="badge badge-{{ plot.plant.category }}">{{ plot.plant.category }}</span></span></td>
+                <td>{{ plot.date_planted }}</td>
+                <td>{{ plot.get_status_display }}</td>
+                <td>{{ plot.quantity }}</td>
+                <td>{{ plot.expected_harvest_date|default:"—" }}</td>
+                <td>
+                  {% if plot.days_remaining is not None %}
+                    <span style="color:{% if plot.days_remaining < 7 %}var(--accent-red){% elif plot.days_remaining < 21 %}var(--accent-warm){% else %}var(--green-base){% endif %};font-weight:600">{{ plot.days_remaining }}d</span>
+                  {% else %}—{% endif %}
+                </td>
+                <td>
+                  <div class="flex gap-2">
+                    <a href="{% url 'journal_create' %}?plot={{ plot.pk }}" class="btn btn-outline btn-sm btn-icon" title="Log">📔</a>
+                    <a href="{% url 'plot_update' plot.pk %}" class="btn btn-outline btn-sm btn-icon">✏️</a>
+                    <a href="{% url 'plot_delete' plot.pk %}" class="btn btn-danger btn-sm btn-icon">🗑️</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="empty-state">
+            <div class="empty-icon">🌱</div>
+            <p>No plants yet. Start planting!</p>
+            <a href="{% url 'plot_create' bed.pk %}" class="btn btn-primary">+ Plant Something</a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <div class="card-header"><h3>📋 Bed Details</h3></div>
+      <div class="card-body">
+        <div class="mb-2"><div class="text-muted text-sm mb-1">📐 Dimensions</div><strong>{{ bed.width_ft }}ft × {{ bed.length_ft }}ft ({{ bed.total_sqft }} sq ft)</strong></div>
+        <div class="mb-2"><div class="text-muted text-sm mb-1">☀️ Light</div><strong>{{ bed.get_light_condition_display }}</strong></div>
+        <div class="mb-2"><div class="text-muted text-sm mb-1">🌿 Soil</div><strong>{{ bed.get_soil_type_display }}</strong></div>
+        {% if bed.notes %}<div><div class="text-muted text-sm mb-1">📝 Notes</div><p>{{ bed.notes }}</p></div>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

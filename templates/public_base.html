@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Home Garden Planner{% endblock %}</title>
+  <meta name="description" content="Plan, track, and grow your home garden with ease.">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.1">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+</head>
+<body class="public-page">
+  
+  <nav class="public-navbar">
+    <div class="navbar-container">
+      <a href="{% url 'home' %}" class="navbar-brand">
+        <span class="logo-icon">🌿</span>
+        <span class="brand-text">Garden Planner</span>
+      </a>
+      
+      <div class="navbar-links">
+        <a href="{% url 'home' %}" class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">Home</a>
+        <a href="{% url 'about' %}" class="nav-item {% if request.resolver_match.url_name == 'about' %}active{% endif %}">About</a>
+      </div>
+
+      <div class="navbar-actions">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="btn btn-outline">Dashboard</a>
+          <a href="{% url 'profile' %}" class="btn btn-primary">Profile</a>
+        {% else %}
+          <a href="{% url 'login' %}" class="btn btn-outline">Log In</a>
+          <a href="{% url 'register' %}" class="btn btn-primary">Sign Up</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="public-main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="public-footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="logo-icon">🌿</span> Garden Planner
+      </div>
+      <div class="footer-text">
+        &copy; {% now "Y" %} Home Garden Planner. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

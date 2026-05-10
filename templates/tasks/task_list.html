@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Tasks{% endblock %}
+{% block page_title %}✅ Tasks{% endblock %}
+{% block topbar_actions %}<a href="{% url 'task_create' %}" class="btn btn-primary btn-sm">+ Add Task</a>{% endblock %}
+{% block content %}
+<div class="filter-chips mb-3">
+  <a href="?filter=pending" class="chip {% if filter_type == 'pending' %}active{% endif %}">🟡 Pending</a>
+  <a href="?filter=overdue" class="chip {% if filter_type == 'overdue' %}active{% endif %}">🔴 Overdue</a>
+  <a href="?filter=completed" class="chip {% if filter_type == 'completed' %}active{% endif %}">✅ Completed</a>
+</div>
+{% if tasks %}
+  <div class="item-list">
+    {% for task in tasks %}
+    <div class="item-row {% if task.is_overdue %}overdue{% endif %} {% if task.is_completed %}completed{% endif %}">
+      <span class="item-icon">{% if task.priority == 'urgent' %}🔴{% elif task.priority == 'high' %}🟠{% elif task.priority == 'medium' %}🟡{% else %}🟢{% endif %}</span>
+      <div class="item-info">
+        <div class="item-title">{{ task.title }}</div>
+        <div class="item-meta">
+          {% if task.due_date %}📅 {{ task.due_date }}{% endif %}
+          {% if task.related_garden_bed %} · 🪴 {{ task.related_garden_bed.name }}{% endif %}
+          <span class="badge badge-{{ task.priority }}" style="margin-left:6px">{{ task.get_priority_display }}</span>
+          {% if task.is_overdue %}<span class="badge badge-overdue" style="margin-left:4px">Overdue</span>{% endif %}
+        </div>
+      </div>
+      <div class="item-actions">
+        <a href="{% url 'task_toggle' task.pk %}" class="btn btn-primary btn-sm" title="Toggle">{% if task.is_completed %}↩️{% else %}✓{% endif %}</a>
+        <a href="{% url 'task_update' task.pk %}" class="btn btn-outline btn-sm btn-icon">✏️</a>
+        <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger btn-sm btn-icon">🗑️</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">✅</div>
+    <p>No tasks here. {% if filter_type == 'completed' %}Complete some tasks first!{% else %}Add a new task to get started.{% endif %}</p>
+    <a href="{% url 'task_create' %}" class="btn btn-primary">+ Add Task</a>
+  </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Delete Schedule{% endblock %}
+{% block page_title %}🗑️ Delete Schedule{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body" style="text-align:center;padding:40px">
+    <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
+    <h3 style="font-family:'Nunito',sans-serif;font-size:1.2rem;margin-bottom:8px">Delete this schedule?</h3>
+    <p class="text-muted mb-3">{{ schedule.get_care_type_display }} for {{ schedule.plot.plant.name }}</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="flex gap-2" style="justify-content:center">
+        <button type="submit" class="btn btn-danger">🗑️ Delete</button>
+        <a href="{% url 'schedule_list' %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

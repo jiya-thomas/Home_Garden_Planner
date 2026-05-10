@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Agri Hub - Home Garden Planner{% endblock %}
+{% block page_title %}Agri Hub Management Dashboard{% endblock %}
+
+{% block topbar_actions %}
+<a href="{% url 'add_tip' %}" class="btn btn-primary"><span class="nav-icon">💡</span> Add Tip</a>
+<a href="{% url 'add_seed' %}" class="btn btn-outline"><span class="nav-icon">🌱</span> Add Seed</a>
+<a href="{% url 'add_fertilizer' %}" class="btn btn-outline"><span class="nav-icon">🧪</span> Add Fertilizer</a>
+{% endblock %}
+
+{% block content %}
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon warm">💡</div>
+        <div class="stat-info">
+            <div class="stat-value">{{ tips.count }}</div>
+            <div class="stat-label">Your Tips</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon green">🌱</div>
+        <div class="stat-info">
+            <div class="stat-value">{{ seeds.count }}</div>
+            <div class="stat-label">Total Seeds listed</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon blue">🧪</div>
+        <div class="stat-info">
+            <div class="stat-value">{{ fertilizers.count }}</div>
+            <div class="stat-label">Total Fertilizers</div>
+        </div>
+    </div>
+</div>
+
+<h3 class="section-title mt-4">Your Recent Farming Tips</h3>
+<div class="plant-grid">
+    {% for tip in tips %}
+        <div class="card p-3" style="border-left: 4px solid var(--accent-warm);">
+            <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ tip.title }}</h4>
+            <div class="text-muted mb-2 text-sm">
+                {{ tip.created_at|date:"M d, Y" }}
+            </div>
+            <p style="font-size: 0.9rem; line-height: 1.5;">{{ tip.content|truncatewords:20 }}</p>
+        </div>
+    {% empty %}
+        <div class="alert alert-info" style="grid-column: 1 / -1;">You haven't published any farming tips yet.</div>
+    {% endfor %}
+</div>
+
+<h3 class="section-title mt-4">Listed Seeds</h3>
+<div class="plant-grid">
+    {% for seed in seeds %}
+        <div class="card p-3" style="border-top: 4px solid var(--green-light);">
+            <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ seed.name }}</h4>
+            <div style="margin-bottom: 12px;">
+                <span class="badge badge-high">{{ seed.crop_type }}</span>
+            </div>
+            <p class="text-sm"><strong>Available:</strong> {{ seed.quantity_available }}</p>
+            <p class="text-sm"><strong>Center:</strong> {{ seed.distribution_center }}</p>
+        </div>
+    {% empty %}
+        <div class="alert alert-info" style="grid-column: 1 / -1;">No seeds listed currently.</div>
+    {% endfor %}
+</div>
+
+{% endblock %}

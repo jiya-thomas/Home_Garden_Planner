@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}{{ plant.name }} — Garden Planner{% endblock %}
+{% block page_title %}🌱 {{ plant.name }}{% endblock %}
+{% block topbar_actions %}
+  <a href="{% url 'plant_update' plant.pk %}" class="btn btn-outline btn-sm">✏️ Edit</a>
+  <a href="{% url 'plant_delete' plant.pk %}" class="btn btn-danger btn-sm">🗑️ Delete</a>
+{% endblock %}
+{% block content %}
+<div style="display:grid;grid-template-columns:320px 1fr;gap:22px">
+  <div>
+    <div class="card" style="overflow:hidden">
+      <div style="height:240px;background:var(--green-ghost);display:flex;align-items:center;justify-content:center;font-size:5rem">
+        {% if plant.image %}<img src="{{ plant.image.url }}" alt="{{ plant.name }}" style="width:100%;height:100%;object-fit:cover">
+        {% elif plant.category == 'vegetable' %}🥦{% elif plant.category == 'herb' %}🌿{% elif plant.category == 'flower' %}🌸{% elif plant.category == 'fruit' %}🍓{% else %}🪴{% endif %}
+      </div>
+      <div class="card-body">
+        <span class="badge badge-{{ plant.category }} mb-2">{{ plant.get_category_display }}</span>
+        {% if plant.scientific_name %}<p class="text-muted" style="font-style:italic">{{ plant.scientific_name }}</p>{% endif %}
+        <p class="mt-2" style="font-size:.9rem;line-height:1.6">{{ plant.description }}</p>
+      </div>
+    </div>
+  </div>
+  <div>
+    <div class="card mb-3">
+      <div class="card-header"><h3>📋 Growing Info</h3></div>
+      <div class="card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+          <div><div class="text-muted text-sm mb-1">☀️ Sun Requirement</div><strong>{{ plant.get_sun_requirement_display }}</strong></div>
+          <div><div class="text-muted text-sm mb-1">💧 Water Frequency</div><strong>{{ plant.get_water_frequency_display }}</strong></div>
+          <div><div class="text-muted text-sm mb-1">🌱 Days to Germinate</div><strong>{{ plant.days_to_germinate }} days</strong></div>
+          <div><div class="text-muted text-sm mb-1">🧺 Days to Harvest</div><strong>{{ plant.days_to_harvest }} days</strong></div>
+          <div><div class="text-muted text-sm mb-1">📏 Spacing</div><strong>{{ plant.spacing_inches }}"</strong></div>
+          <div><div class="text-muted text-sm mb-1">📅 Season</div><strong>{{ plant.planting_season|default:"Year-round" }}</strong></div>
+        </div>
+      </div>
+    </div>
+    {% if plant.companion_plants or plant.avoid_plants %}
+    <div class="card mb-3">
+      <div class="card-header"><h3>🤝 Companion Planting</h3></div>
+      <div class="card-body">
+        {% if plant.companion_plants %}
+          <div class="mb-2"><div class="text-muted text-sm mb-1">✅ Plant With</div>{{ plant.companion_plants }}</div>
+        {% endif %}
+        {% if plant.avoid_plants %}
+          <div><div class="text-muted text-sm mb-1">❌ Avoid Near</div>{{ plant.avoid_plants }}</div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% if plant.care_tips %}
+    <div class="card">
+      <div class="card-header"><h3>💡 Care Tips</h3></div>
+      <div class="card-body"><p style="line-height:1.7">{{ plant.care_tips }}</p></div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

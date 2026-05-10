@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Delete Task{% endblock %}
+{% block page_title %}🗑️ Delete Task{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body" style="text-align:center;padding:40px">
+    <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
+    <h3 style="font-family:'Nunito',sans-serif;font-size:1.2rem;margin-bottom:8px">Delete "{{ task.title }}"?</h3>
+    <form method="post">
+      {% csrf_token %}
+      <div class="flex gap-2" style="justify-content:center">
+        <button type="submit" class="btn btn-danger">🗑️ Delete</button>
+        <a href="{% url 'task_list' %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

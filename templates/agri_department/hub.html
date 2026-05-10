@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Agriculture Department Hub - Home Garden Planner{% endblock %}
+{% block page_title %}Government Agriculture Department Hub{% endblock %}
+
+{% block content %}
+<div class="card p-4 mb-4" style="background: linear-gradient(135deg, #1d976c 0%, #93f9b9 100%); color: white; border: none; border-radius: 12px;">
+    <h2><span style="font-size: 1.5rem;">🌾</span> Kerala Agriculture Department</h2>
+    <p>Welcome to the farmers' hub! Here you can find available seeds, fertilizers distributed by the government, and expert farming tips.</p>
+</div>
+
+<div class="search-bar">
+    <div class="filter-chips" id="agriTabs">
+        <button class="chip active" onclick="switchTab('tips')">💡 Farming Tips</button>
+        <button class="chip" onclick="switchTab('seeds')">🌱 Available Seeds</button>
+        <button class="chip" onclick="switchTab('fertilizers')">🧪 Fertilizers</button>
+    </div>
+</div>
+
+<div class="tab-content" id="agriTabsContent">
+    <!-- Tips Tab -->
+    <div class="tab-content-pane" id="tips">
+        <div class="plant-grid">
+            {% for tip in tips %}
+                <div class="card p-3" style="border-left: 4px solid var(--accent-warm);">
+                    <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ tip.title }}</h4>
+                    <div class="text-muted mb-2 text-sm">
+                        By {% if tip.author %}{{ tip.author.get_full_name|default:tip.author.username }}{% else %}Dept. Official{% endif %} 
+                        | {{ tip.created_at|date:"M d, Y" }}
+                    </div>
+                    <p style="font-size: 0.9rem; line-height: 1.5;">{{ tip.content|linebreaksbr }}</p>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No farming tips available at the moment.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Seeds Tab -->
+    <div class="tab-content-pane" id="seeds" style="display: none;">
+        <div class="plant-grid">
+            {% for seed in seeds %}
+                <div class="card p-3" style="border-top: 4px solid var(--green-light);">
+                    <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ seed.name }}</h4>
+                    <div style="margin-bottom: 12px;">
+                        <span class="badge badge-high">{{ seed.crop_type }}</span>
+                        {% if seed.variety %}<span class="badge badge-medium">{{ seed.variety }}</span>{% endif %}
+                    </div>
+                    <ul class="text-sm text-muted" style="list-style: none; padding-left: 0; margin-bottom: 10px;">
+                        <li><strong>Available:</strong> {{ seed.quantity_available }}</li>
+                        <li><strong>Center:</strong> {{ seed.distribution_center }}</li>
+                    </ul>
+                    {% if seed.description %}
+                        <p style="font-size: 0.85rem; color: var(--text-muted);">{{ seed.description }}</p>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No seeds listed currently. Check back later!</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Fertilizers Tab -->
+    <div class="tab-content-pane" id="fertilizers" style="display: none;">
+        <div class="plant-grid">
+            {% for fert in fertilizers %}
+                <div class="card p-3" style="border-top: 4px solid var(--green-mid);">
+                    <h4 style="color: var(--green-dark); font-weight: 700; margin-bottom: 4px;">{{ fert.name }}</h4>
+                    <span class="badge badge-low mb-2">{{ fert.type }}</span>
+                    <p class="text-sm"><strong>Available:</strong> {{ fert.quantity_available }}</p>
+                    {% if fert.description %}
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">{{ fert.description }}</p>
+                    {% endif %}
+                    <div class="p-2" style="background: var(--green-ghost); border-radius: 8px;">
+                        <strong class="text-sm" style="color: var(--green-dark);">Usage Instructions:</strong>
+                        <p style="font-size: 0.85rem; margin-top: 4px;">{{ fert.usage_instructions|linebreaksbr }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">No fertilizers listed currently.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content-pane').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('#agriTabs .chip').forEach(el => el.classList.remove('active'));
+    document.getElementById(tabId).style.display = 'block';
+    if(event) {
+        event.currentTarget.classList.add('active');
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    switchTab('tips');
+    document.querySelector('#agriTabs .chip').classList.add('active');
+});
+</script>
+
+{% endblock %}

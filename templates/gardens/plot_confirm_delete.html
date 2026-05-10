@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Remove Plant{% endblock %}
+{% block page_title %}🗑️ Remove Plant{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body" style="text-align:center;padding:40px">
+    <div style="font-size:3rem;margin-bottom:12px">⚠️</div>
+    <h3 style="font-family:'Nunito',sans-serif;font-size:1.2rem;margin-bottom:8px">Remove {{ plot.plant.name }} from {{ plot.bed.name }}?</h3>
+    <p class="text-muted mb-3">Journal entries and schedules for this plant will also be removed.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="flex gap-2" style="justify-content:center">
+        <button type="submit" class="btn btn-danger">🗑️ Remove Plant</button>
+        <a href="{% url 'bed_detail' plot.bed.pk %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}About - Home Garden Planner{% endblock %}
+
+{% block content %}
+<section class="about-hero">
+  <div class="about-hero-content">
+    <h1>About <span class="text-gradient">Garden Planner</span></h1>
+    <p>Empowering anyone to grow their own food, right in their backyard.</p>
+  </div>
+</section>
+
+<section class="about-content-section">
+  <div class="about-grid">
+    <div class="about-text">
+      <h2>Our Mission</h2>
+      <p>We believe that gardening should be accessible, organized, and deeply rewarding. Whether you have a sprawling backyard or a few pots on a balcony, our mission is to provide the digital tools you need to cultivate a thriving garden.</p>
+      
+      <h2>Why We Built This</h2>
+      <p>Keeping track of planting dates, watering schedules, and fertilization routines can be overwhelming. We built the Home Garden Planner to replace messy notebooks and spreadsheets with a beautifully designed, intuitive platform.</p>
+      
+      <ul class="about-list">
+        <li><span>🌱</span> <strong>Visual Planning:</strong> Know exactly where every plant is growing.</li>
+        <li><span>📅</span> <strong>Smart Schedules:</strong> Automated reminders so your plants never go thirsty.</li>
+        <li><span>🌿</span> <strong>Plant Library:</strong> Rich information on exactly how to care for different species.</li>
+      </ul>
+      
+      <div class="about-cta mt-4">
+        {% if not user.is_authenticated %}
+          <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Join Our Community</a>
+        {% else %}
+          <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="about-image">
+      <div class="glass-card about-glass-card image-card">
+        <img src="{% static 'img/about_garden.png' %}" alt="Lush home vegetable garden" class="about-photo">
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

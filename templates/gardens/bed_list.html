@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Garden Beds{% endblock %}
+{% block page_title %}🪴 My Garden Beds{% endblock %}
+{% block topbar_actions %}<a href="{% url 'bed_create' %}" class="btn btn-primary btn-sm">+ New Bed</a>{% endblock %}
+{% block content %}
+{% if beds %}
+  <div class="bed-grid">
+    {% for bed in beds %}
+    <div class="card bed-card">
+      <h4>{{ bed.name }}</h4>
+      <div class="bed-meta">
+        <span class="bed-stat">📐 {{ bed.total_sqft }} sq ft</span>
+        <span class="bed-stat">☀️ {{ bed.get_light_condition_display }}</span>
+        <span class="bed-stat">🌿 {{ bed.get_soil_type_display }}</span>
+        <span class="bed-stat">🌱 {{ bed.planted_count }} plants</span>
+      </div>
+      {% if bed.notes %}<p class="text-muted text-sm mb-2">{{ bed.notes|truncatechars:80 }}</p>{% endif %}
+      <div class="flex gap-2 mt-2">
+        <a href="{% url 'bed_detail' bed.pk %}" class="btn btn-primary btn-sm">View Bed</a>
+        <a href="{% url 'bed_update' bed.pk %}" class="btn btn-outline btn-sm">Edit</a>
+        <a href="{% url 'bed_delete' bed.pk %}" class="btn btn-danger btn-sm">🗑️</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🌿</div>
+    <p>No garden beds yet! Create your first one to start planning.</p>
+    <a href="{% url 'bed_create' %}" class="btn btn-primary">🪴 Create Garden Bed</a>
+  </div>
+{% endif %}
+{% endblock %}

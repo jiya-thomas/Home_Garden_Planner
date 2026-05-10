@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Care Schedules{% endblock %}
+{% block page_title %}📅 Care Schedules{% endblock %}
+{% block topbar_actions %}<a href="{% url 'schedule_create' %}" class="btn btn-primary btn-sm">+ Add Schedule</a>{% endblock %}
+{% block content %}
+{% if schedules %}
+  <div class="item-list">
+    {% for s in schedules %}
+    <div class="item-row {% if s.is_overdue %}overdue{% endif %}">
+      <span class="item-icon">{{ s.care_icon }}</span>
+      <div class="item-info">
+        <div class="item-title">{{ s.get_care_type_display }} — {{ s.plot.plant.name }}</div>
+        <div class="item-meta">
+          🪴 {{ s.plot.bed.name }} · 🔁 Every {{ s.frequency_days }} days · 📅 Next: {{ s.next_due_date }}
+          {% if s.is_overdue %}<span class="badge badge-overdue" style="margin-left:6px">Overdue</span>{% endif %}
+        </div>
+      </div>
+      <div class="item-actions">
+        <a href="{% url 'schedule_done' s.pk %}" class="btn btn-primary btn-sm" title="Mark Done">✓ Done</a>
+        <a href="{% url 'schedule_update' s.pk %}" class="btn btn-outline btn-sm btn-icon">✏️</a>
+        <a href="{% url 'schedule_delete' s.pk %}" class="btn btn-danger btn-sm btn-icon">🗑️</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">📅</div>
+    <p>No care schedules yet. Add schedules to track watering, fertilizing, and more.</p>
+    <a href="{% url 'schedule_create' %}" class="btn btn-primary">+ Add Schedule</a>
+  </div>
+{% endif %}
+{% endblock %}

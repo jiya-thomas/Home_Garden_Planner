@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Plant Library — Garden Planner{% endblock %}
+{% block page_title %}🌱 Plant Library{% endblock %}
+{% block topbar_actions %}
+  <a href="{% url 'plant_create' %}" class="btn btn-primary btn-sm">+ Add Plant</a>
+{% endblock %}
+{% block content %}
+<div class="search-bar">
+  <div class="search-input-wrap">
+    <span class="search-icon">🔍</span>
+    <form method="get">
+      <input type="text" name="q" value="{{ query }}" placeholder="Search plants..." id="plant-search">
+    </form>
+  </div>
+  <div class="filter-chips">
+    <a href="{% url 'plant_list' %}" class="chip {% if not selected_category %}active{% endif %}">All</a>
+    {% for cat in categories %}
+      <a href="?category={{ cat }}" class="chip {% if selected_category == cat %}active{% endif %}">{{ cat|capfirst }}</a>
+    {% endfor %}
+  </div>
+</div>
+{% if plants %}
+  <div class="plant-grid">
+    {% for plant in plants %}
+    <a href="{% url 'plant_detail' plant.pk %}" class="plant-card">
+      <div class="plant-card-img">
+        {% if plant.image %}<img src="{{ plant.image.url }}" alt="{{ plant.name }}">
+        {% else %}
+          {% if plant.category == 'vegetable' %}🥦{% elif plant.category == 'herb' %}🌿{% elif plant.category == 'flower' %}🌸{% elif plant.category == 'fruit' %}🍓{% elif plant.category == 'tree' %}🌳{% elif plant.category == 'vine' %}🍇{% else %}🪴{% endif %}
+        {% endif %}
+      </div>
+      <div class="plant-card-body">
+        <h4>{{ plant.name }}</h4>
+        <p>{{ plant.description|truncatechars:70 }}</p>
+        <span class="badge badge-{{ plant.category }}">{{ plant.get_category_display }}</span>
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <p>No plants found. Try a different search or add a new plant.</p>
+    <a href="{% url 'plant_create' %}" class="btn btn-primary">+ Add Plant</a>
+  </div>
+{% endif %}
+{% endblock %}

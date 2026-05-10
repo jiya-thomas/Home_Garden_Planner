@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — Garden Planner{% endblock %}
+{% block page_title %}🏡 Dashboard{% endblock %}
+{% block topbar_actions %}
+  <a href="{% url 'bed_create' %}" class="btn btn-primary btn-sm">+ New Bed</a>
+  <a href="{% url 'task_create' %}" class="btn btn-outline btn-sm">+ Add Task</a>
+{% endblock %}
+
+{% block content %}
+<!-- Stats Row -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon green">🪴</div>
+    <div class="stat-info">
+      <div class="stat-value">{{ stats.total_beds }}</div>
+      <div class="stat-label">Garden Beds</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">🌱</div>
+    <div class="stat-info">
+      <div class="stat-value">{{ stats.total_plants }}</div>
+      <div class="stat-label">Plants Growing</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon warm">✅</div>
+    <div class="stat-info">
+      <div class="stat-value">{{ stats.pending_tasks }}</div>
+      <div class="stat-label">Pending Tasks</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon brown">📅</div>
+    <div class="stat-info">
+      <div class="stat-value">{{ stats.due_today }}</div>
+      <div class="stat-label">Care Due Today</div>
+    </div>
+  </div>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-bottom:22px">
+  <!-- Due Care -->
+  <div class="card">
+    <div class="card-header">
+      <h3>💧 Care Due Today</h3>
+      <a href="{% url 'schedule_list' %}" class="btn btn-outline btn-sm">View All</a>
+    </div>
+    <div class="card-body">
+      {% if due_schedules %}
+        <div class="item-list">
+          {% for s in due_schedules %}
+          <div class="item-row {% if s.is_overdue %}overdue{% endif %}">
+            <span class="item-icon">{{ s.care_icon }}</span>
+            <div class="item-info">
+              <div class="item-title">{{ s.get_care_type_display }} — {{ s.plot.plant.name }}</div>
+              <div class="item-meta">{{ s.plot.bed.name }} · Due: {{ s.next_due_date }}</div>
+            </div>
+            <div class="item-actions">
+              <a href="{% url 'schedule_done' s.pk %}" class="btn btn-primary btn-sm btn-icon" title="Mark Done">✓</a>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">☀️</div>
+          <p>No care tasks due today!</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Upcoming Tasks -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📝 Upcoming Tasks</h3>
+      <a href="{% url 'task_create' %}" class="btn btn-outline btn-sm">+ Add</a>
+    </div>
+    <div class="card-body">
+      {% if upcoming_tasks %}
+        <div class="item-list">
+          {% for task in upcoming_tasks %}
+          <div class="item-row {% if task.is_overdue %}overdue{% endif %}">
+            <span class="item-icon">{% if task.priority == 'urgent' %}🔴{% elif task.priority == 'high' %}🟠{% else %}🟢{% endif %}</span>
+            <div class="item-info">
+              <div class="item-title">{{ task.title }}</div>
+              <div class="item-meta">
+                {% if task.due_date %}Due {{ task.due_date }}{% endif %}
+                <span class="badge badge-{{ task.priority }}" style="margin-left:6px">{{ task.priority }}</span>
+              </div>
+            </div>
+            <a href="{% url 'task_toggle' task.pk %}" class="btn btn-outline btn-sm btn-icon">✓</a>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">✅</div>
+          <p>All tasks complete!</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- My Garden Beds -->
+<div class="card">
+  <div class="card-header">
+    <h3>🪴 My Garden Beds</h3>
+    <a href="{% url 'bed_create' %}" class="btn btn-primary btn-sm">+ New Bed</a>
+  </div>
+  <div class="card-body">
+    {% if beds %}
+      <div class="bed-grid">
+        {% for bed in beds %}
+        <a href="{% url 'bed_detail' bed.pk %}" class="card" style="text-decoration:none;color:inherit">
+          <div class="card-body">
+            <h4 style="font-family:'Nunito',sans-serif;font-weight:700;color:var(--green-dark)">{{ bed.name }}</h4>
+            <div class="bed-meta">
+              <span class="bed-stat">📐 {{ bed.total_sqft }} sq ft</span>
+              <span class="bed-stat">☀️ {{ bed.get_light_condition_display }}</span>
+              <span class="bed-stat">🌱 {{ bed.planted_count }} plants</span>
+            </div>
+            <div class="progress-wrap">
+              {% if bed.planted_count %}
+                <div class="progress-bar" style="width: 60%;"></div>
+              {% else %}
+                <div class="progress-bar" style="width: 10%;"></div>
+              {% endif %}
+            </div>
+            <span class="text-muted text-sm mt-1">{{ bed.get_soil_type_display }} soil</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <p>No garden beds yet. Create your first one!</p>
+        <a href="{% url 'bed_create' %}" class="btn btn-primary">🪴 Create Garden Bed</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

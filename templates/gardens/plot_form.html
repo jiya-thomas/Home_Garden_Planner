@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Plant in {{ bed.name }}{% endblock %}
+{% block page_title %}🌱 Plant in {{ bed.name }}{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group" style="grid-column:1/-1"><label>Plant *</label>{{ form.plant }}</div>
+        <div class="form-group"><label>Date Planted *</label>{{ form.date_planted }}</div>
+        <div class="form-group"><label>Quantity</label>{{ form.quantity }}</div>
+        <div class="form-group"><label>Status</label>{{ form.status }}</div>
+        <div class="form-group"><label>Row Position</label>{{ form.row }}</div>
+        <div class="form-group"><label>Column Position</label>{{ form.col }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Notes</label>{{ form.notes }}</div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">🪴 Plant It!</button>
+        <a href="{% url 'bed_detail' bed.pk %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

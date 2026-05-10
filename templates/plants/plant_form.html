@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} — Garden Planner{% endblock %}
+{% block page_title %}🌱 {{ title }}{% endblock %}
+{% block content %}
+<div class="card form-card">
+  <div class="card-body">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="form-group" style="grid-column:1/-1"><label>Plant Name *</label>{{ form.name }}</div>
+        <div class="form-group"><label>Scientific Name</label>{{ form.scientific_name }}</div>
+        <div class="form-group"><label>Category</label>{{ form.category }}</div>
+        <div class="form-group"><label>Sun Requirement</label>{{ form.sun_requirement }}</div>
+        <div class="form-group"><label>Water Frequency</label>{{ form.water_frequency }}</div>
+        <div class="form-group"><label>Days to Germinate</label>{{ form.days_to_germinate }}</div>
+        <div class="form-group"><label>Days to Harvest</label>{{ form.days_to_harvest }}</div>
+        <div class="form-group"><label>Spacing (inches)</label>{{ form.spacing_inches }}</div>
+        <div class="form-group"><label>Planting Season</label>{{ form.planting_season }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Description</label>{{ form.description }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Companion Plants</label>{{ form.companion_plants }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Avoid Near</label>{{ form.avoid_plants }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Care Tips</label>{{ form.care_tips }}</div>
+        <div class="form-group" style="grid-column:1/-1"><label>Photo</label>{{ form.image }}</div>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">💾 Save Plant</button>
+        <a href="{% url 'plant_list' %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

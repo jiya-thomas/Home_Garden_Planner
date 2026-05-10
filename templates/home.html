@@ -1,0 +1,79 @@
+{% extends 'public_base.html' %}
+{% load static %}
+
+{% block title %}Home Garden Planner - Grow Your Dream Garden{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-badge">✨ The ultimate gardening companion</div>
+    <h1 class="hero-title">Cultivate Your <span class="text-gradient">Dream Garden</span> With Ease</h1>
+    <p class="hero-subtitle">Plan your garden beds, track plant growth, get timely care schedules, and watch your harvest flourish.</p>
+    <div class="hero-actions">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg">Go to Dashboard</a>
+      {% else %}
+        <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Start Growing Today</a>
+        <a href="{% url 'about' %}" class="btn btn-outline btn-lg">Learn More</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="glass-card visual-card main-card">
+      <div class="card-header">
+        <h3>🌿 My Garden</h3>
+      </div>
+      <div class="card-body">
+        <div class="mock-plot-grid">
+          <div class="mock-plot plant-1">🍅</div>
+          <div class="mock-plot plant-2">🌿</div>
+          <div class="mock-plot plant-3">🥕</div>
+          <div class="mock-plot plant-1">🍅</div>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card visual-card float-card-1">
+      <div class="task-item">
+        <span class="icon">💧</span>
+        <div>
+          <strong>Water Tomatoes</strong>
+          <small>Today</small>
+        </div>
+      </div>
+    </div>
+    <div class="glass-card visual-card float-card-2">
+      <div class="task-item">
+        <span class="icon">✂️</span>
+        <div>
+          <strong>Prune Basil</strong>
+          <small>Tomorrow</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section">
+  <div class="section-header">
+    <h2>Everything you need to grow successfully</h2>
+    <p>A complete suite of tools designed for home gardeners of all skill levels.</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon green">🪴</div>
+      <h3>Garden Planning</h3>
+      <p>Design your garden beds visually and keep track of what's planted where.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon warm">📅</div>
+      <h3>Care Schedules</h3>
+      <p>Never forget to water or fertilize. Get tailored care schedules for every plant.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon blue">📔</div>
+      <h3>Growth Journal</h3>
+      <p>Document your gardening journey with photos and notes from seed to harvest.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}
